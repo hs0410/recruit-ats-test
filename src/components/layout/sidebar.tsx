@@ -56,6 +56,7 @@ const offerNav = [
 
 const insightNav = [
   { href: '/analytics', label: '채용 분석', icon: BarChart3 },
+  { href: '/talent-pool', label: '인재풀 분석', icon: Users },
   { href: '/market', label: '채용 시장', icon: TrendingUp },
   { href: '/insights', label: '인사이트', icon: Newspaper },
   { href: '/compliance', label: '컴플라이언스', icon: Shield },
@@ -103,7 +104,7 @@ export default function Sidebar() {
           </div>
           <div>
             <h1 className="text-[15px] font-bold text-foreground tracking-tight">채용 ATS</h1>
-            <p className="text-[11px] text-muted -mt-0.5">Applicant Tracking</p>
+            <p className="text-[11px] text-muted -mt-0.5">채용담당자</p>
           </div>
         </div>
       </div>

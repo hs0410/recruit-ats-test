@@ -1,83 +1,128 @@
 'use client'
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { Sparkles, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
+import { Sparkles, GraduationCap, Briefcase, CheckCircle2, Shield } from 'lucide-react'
 
-export default function LoginPage() {
-  const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+const roles = [
+  {
+    title: '구직자',
+    description: '공고 맞춤 이력서 분석, AI 자소서 코칭, 기업 적합도까지',
+    icon: GraduationCap,
+    href: '/seeker/dashboard',
+    features: [
+      '공고 기반 이력서 분석 & 키워드 매칭',
+      'AI 자기소개서 코치 & 기업 적합도',
+      '면접 준비 & 자격증 관리',
+    ],
+    gradient: 'from-indigo-500 to-purple-600',
+    gradientLight: 'from-indigo-50 to-purple-50',
+    iconBg: 'bg-indigo-100 text-indigo-600',
+    borderHover: 'hover:border-indigo-300',
+    buttonGradient: 'from-indigo-500 to-purple-600',
+  },
+  {
+    title: '채용관리자',
+    description: '채용 전 과정을 효율적으로 관리하세요',
+    icon: Briefcase,
+    href: '/dashboard',
+    features: [
+      '파이프라인 & 전형 관리',
+      'AI 이력서 분석 & JD 매칭',
+      '인재풀 데이터 분석',
+    ],
+    gradient: 'from-blue-500 to-cyan-500',
+    gradientLight: 'from-blue-50 to-cyan-50',
+    iconBg: 'bg-blue-100 text-blue-600',
+    borderHover: 'hover:border-blue-300',
+    buttonGradient: 'from-blue-500 to-cyan-500',
+  },
+]
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault()
-    router.push('/dashboard')
-  }
-
+export default function RoleSelectionPage() {
   return (
-    <div className="min-h-screen gradient-bg flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex flex-col items-center justify-center px-4 py-12">
       {/* 배경 장식 */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#3182f6]/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#8b5cf6]/10 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-[#3182f6]/8 rounded-full blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-[#8b5cf6]/8 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[#3182f6]/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="w-full max-w-[400px] relative">
-        {/* 로고 */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-[#3182f6] to-[#8b5cf6] mb-5 shadow-soft-lg">
-            <Sparkles size={24} className="text-white" />
-          </div>
-          <h1 className="text-[28px] font-bold text-foreground">채용 ATS</h1>
-          <p className="text-[14px] text-muted mt-2">채용의 모든 과정을 한 곳에서</p>
+      {/* 히어로 섹션 */}
+      <div className="text-center mb-14 relative">
+        <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#3182f6] to-[#8b5cf6] mb-6 shadow-lg shadow-indigo-200">
+          <Sparkles size={28} className="text-white" />
         </div>
-
-        {/* 로그인 폼 */}
-        <div className="glass rounded-2xl p-8 shadow-soft-lg">
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-[13px] font-semibold text-foreground mb-2">이메일</label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-border bg-white text-[14px] placeholder:text-muted/50"
-                placeholder="admin@company.com"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[13px] font-semibold text-foreground mb-2">비밀번호</label>
-              <input
-                type="password"
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl border border-border bg-white text-[14px] placeholder:text-muted/50"
-                placeholder="••••••••"
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-gradient-to-r from-[#3182f6] to-[#6366f1] text-white py-3 rounded-xl text-[14px] font-semibold hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-soft"
-            >
-              로그인
-              <ArrowRight size={16} />
-            </button>
-          </form>
-
-          <div className="mt-5 text-center">
-            <button className="text-[13px] text-primary font-medium hover:underline">
-              비밀번호를 잊으셨나요?
-            </button>
-          </div>
-        </div>
-
-        <p className="text-[12px] text-muted/60 text-center mt-8">
-          Powered by Claude Code
+        <h1 className="text-4xl font-bold text-gray-900 tracking-tight">
+          채용 ATS
+        </h1>
+        <p className="text-base text-gray-500 mt-3 max-w-md mx-auto">
+          구직자와 채용담당자를 위한 올인원 플랫폼
         </p>
+      </div>
+
+      {/* 역할 선택 카드 */}
+      <div className="relative flex flex-col md:flex-row gap-6 w-full max-w-[840px]">
+        {roles.map((role) => {
+          const Icon = role.icon
+          return (
+            <div
+              key={role.title}
+              className={`
+                flex-1 bg-white/80 backdrop-blur-sm rounded-2xl border border-gray-200
+                p-8 transition-all duration-300 ease-out
+                hover:-translate-y-1 hover:shadow-xl hover:shadow-gray-200/50
+                ${role.borderHover}
+                group
+              `}
+            >
+              {/* 카드 상단 그라데이션 라인 */}
+              <div className={`h-1 w-12 rounded-full bg-gradient-to-r ${role.gradient} mb-6`} />
+
+              {/* 아이콘 */}
+              <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl ${role.iconBg} mb-5`}>
+                <Icon size={24} />
+              </div>
+
+              {/* 제목 & 설명 */}
+              <h2 className="text-xl font-bold text-gray-900 mb-2">
+                {role.title}
+              </h2>
+              <p className="text-sm text-gray-500 mb-6 leading-relaxed">
+                {role.description}
+              </p>
+
+              {/* 기능 목록 */}
+              <ul className="space-y-3 mb-8">
+                {role.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5 text-sm text-gray-600">
+                    <CheckCircle2 size={16} className="text-emerald-500 mt-0.5 shrink-0" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {/* 시작 버튼 */}
+              <Link
+                href={role.href}
+                className={`
+                  block w-full text-center py-3 rounded-xl text-sm font-semibold
+                  bg-gradient-to-r ${role.buttonGradient} text-white
+                  hover:opacity-90 transition-opacity
+                  shadow-sm
+                `}
+              >
+                시작하기 &rarr;
+              </Link>
+            </div>
+          )
+        })}
+      </div>
+
+      {/* 하단 안내 */}
+      <div className="relative mt-12 flex items-center gap-2 text-xs text-gray-400">
+        <Shield size={14} />
+        <span>개인정보는 채용절차법 및 개인정보보호법에 따라 안전하게 처리됩니다</span>
       </div>
     </div>
   )

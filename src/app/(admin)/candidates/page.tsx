@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Search, Plus, Filter, ArrowUpDown } from 'lucide-react'
+import { Search, Plus, Filter, ArrowUpDown, AlertTriangle, Link2, X, UserCheck } from 'lucide-react'
 import { type Stage } from '@/lib/types'
 
 const mockCandidates = [
@@ -29,9 +29,69 @@ function getInitialColor(name: string) {
   return colors[name.charCodeAt(0) % colors.length]
 }
 
+// 중복 지원자 mock 데이터
+interface DuplicatePair {
+  id: string
+  name: string
+  email: string
+  entries: { job: string; applied_at: string }[]
+  reason: string
+}
+
+const initialDuplicates: DuplicatePair[] = [
+  {
+    id: 'dup-1',
+    name: '김서연',
+    email: 'seoyeon.kim@email.com',
+    entries: [
+      { job: '백엔드 개발자', applied_at: '2026-03-15' },
+      { job: '프론트엔드 개발자', applied_at: '2026-04-01' },
+    ],
+    reason: '동일 이메일로 다른 포지션 지원',
+  },
+  {
+    id: 'dup-2',
+    name: '이준호',
+    email: 'junho.lee@email.com',
+    entries: [
+      { job: 'PM', applied_at: '2026-02-20' },
+      { job: 'PM', applied_at: '2026-04-03' },
+    ],
+    reason: '동일 포지션 재지원',
+  },
+]
+
 export default function CandidatesPage() {
   const [search, setSearch] = useState('')
   const [filterStage, setFilterStage] = useState<string>('all')
+
+  // 중복 체크 상태
+  const [duplicates, setDuplicates] = useState<DuplicatePair[]>(initialDuplicates)
+  const [showDuplicateBanner, setShowDuplicateBanner] = useState(true)
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false)
+  const [toast, setToast] = useState<string | null>(null)
+
+  // 토스트 자동 숨김
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 3000)
+      return () => clearTimeout(timer)
+    }
+  }, [toast])
+
+  // 배너는 중복이 없으면 자동 숨김
+  const bannerVisible = showDuplicateBanner && duplicates.length > 0
+
+  // 중복 처리 액션
+  const handleDuplicateAction = (dupId: string, action: '이력 연결' | '별도 관리' | '무시') => {
+    setDuplicates((prev) => prev.filter((d) => d.id !== dupId))
+    const messages: Record<string, string> = {
+      '이력 연결': '이력이 연결되었습니다',
+      '별도 관리': '별도 후보자로 관리합니다',
+      '무시': '해당 중복 알림을 무시합니다',
+    }
+    setToast(messages[action])
+  }
 
   const filtered = mockCandidates.filter(c => {
     const matchSearch = c.name.includes(search) || c.email.includes(search) || c.job.includes(search)
@@ -41,6 +101,32 @@ export default function CandidatesPage() {
 
   return (
     <div>
+      {/* 중복 지원자 배너 */}
+      {bannerVisible && (
+        <div className="mb-6 flex items-center justify-between bg-[#fffbeb] border border-[#fde68a] rounded-2xl px-5 py-3.5 shadow-soft">
+          <div className="flex items-center gap-3">
+            <AlertTriangle size={18} className="text-[#f59e0b] flex-shrink-0" />
+            <span className="text-[13px] font-semibold text-[#92400e]">
+              ⚠️ 중복 지원자 {duplicates.length}건이 감지되었습니다
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setShowDuplicateModal(true)}
+              className="text-[12px] font-semibold text-[#d97706] bg-[#fef3c7] hover:bg-[#fde68a] px-4 py-1.5 rounded-lg transition-colors"
+            >
+              확인하기
+            </button>
+            <button
+              onClick={() => setShowDuplicateBanner(false)}
+              className="text-[#d97706]/60 hover:text-[#d97706] transition-colors p-1"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-[26px] font-bold text-foreground">후보자 관리</h1>
@@ -142,6 +228,129 @@ export default function CandidatesPage() {
           </tbody>
         </table>
       </div>
+
+      {/* 중복 지원자 모달 */}
+      {showDuplicateModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* 오버레이 */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowDuplicateModal(false)}
+          />
+          {/* 모달 본문 */}
+          <div className="relative bg-card rounded-2xl border border-border shadow-soft w-full max-w-[560px] mx-4 max-h-[80vh] overflow-y-auto">
+            {/* 헤더 */}
+            <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#fef3c7] flex items-center justify-center">
+                  <UserCheck size={18} className="text-[#d97706]" />
+                </div>
+                <div>
+                  <h2 className="text-[16px] font-bold text-foreground">중복 지원자 확인</h2>
+                  <p className="text-[12px] text-muted mt-0.5">
+                    {duplicates.length > 0
+                      ? `${duplicates.length}건의 중복이 감지되었습니다`
+                      : '모든 중복이 처리되었습니다'}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowDuplicateModal(false)}
+                className="text-muted hover:text-foreground transition-colors p-1.5 rounded-lg hover:bg-[#f2f4f6]"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* 중복 목록 */}
+            <div className="px-6 py-4 space-y-4">
+              {duplicates.length === 0 && (
+                <div className="text-center py-10">
+                  <UserCheck size={32} className="mx-auto text-success mb-3" />
+                  <p className="text-[14px] font-semibold text-foreground">모든 중복이 처리되었습니다</p>
+                  <p className="text-[12px] text-muted mt-1">추가 조치가 필요하지 않습니다</p>
+                </div>
+              )}
+
+              {duplicates.map((dup) => (
+                <div
+                  key={dup.id}
+                  className="border border-border rounded-2xl p-5 bg-card hover:border-[#fde68a] transition-colors"
+                >
+                  {/* 후보자 정보 */}
+                  <div className="flex items-start gap-3 mb-4">
+                    <div
+                      className="w-9 h-9 rounded-full flex items-center justify-center text-white text-[13px] font-bold flex-shrink-0"
+                      style={{ backgroundColor: getInitialColor(dup.name) }}
+                    >
+                      {dup.name[0]}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[14px] font-semibold text-foreground">{dup.name}</p>
+                      <p className="text-[12px] text-muted">{dup.email}</p>
+                      <span className="inline-block mt-1.5 text-[11px] font-medium text-[#d97706] bg-[#fef3c7] px-2 py-0.5 rounded-full">
+                        {dup.reason}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 지원 내역 비교 */}
+                  <div className="space-y-2 mb-4">
+                    {dup.entries.map((entry, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between bg-[#f8f9fa] rounded-xl px-4 py-2.5"
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-bold text-muted bg-white border border-border rounded-md px-1.5 py-0.5">
+                            {idx + 1}차
+                          </span>
+                          <span className="text-[13px] font-semibold text-foreground">{entry.job}</span>
+                        </div>
+                        <span className="text-[12px] text-muted">{entry.applied_at}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 액션 버튼 */}
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleDuplicateAction(dup.id, '이력 연결')}
+                      className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-semibold text-primary bg-primary-light hover:bg-primary/10 px-3 py-2 rounded-xl transition-colors"
+                    >
+                      <Link2 size={13} />
+                      이력 연결
+                    </button>
+                    <button
+                      onClick={() => handleDuplicateAction(dup.id, '별도 관리')}
+                      className="flex-1 flex items-center justify-center gap-1.5 text-[12px] font-semibold text-[#6366f1] bg-[#eef2ff] hover:bg-[#6366f1]/10 px-3 py-2 rounded-xl transition-colors"
+                    >
+                      <UserCheck size={13} />
+                      별도 관리
+                    </button>
+                    <button
+                      onClick={() => handleDuplicateAction(dup.id, '무시')}
+                      className="flex items-center justify-center gap-1.5 text-[12px] font-semibold text-muted bg-[#f2f4f6] hover:bg-[#e5e8eb] px-4 py-2 rounded-xl transition-colors"
+                    >
+                      무시
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 토스트 알림 */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[60] animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="bg-foreground text-white text-[13px] font-semibold px-5 py-3 rounded-xl shadow-lg flex items-center gap-2">
+            <UserCheck size={14} />
+            {toast}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

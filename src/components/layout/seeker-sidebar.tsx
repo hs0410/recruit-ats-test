@@ -26,7 +26,6 @@ import {
 const myNav = [
   { href: '/seeker/dashboard', label: '대시보드', icon: LayoutDashboard },
   { href: '/seeker/profile', label: '내 프로필', icon: UserCircle },
-  { href: '/seeker/applications', label: '지원 현황', icon: ClipboardList },
 ]
 
 const prepToolNav = [
@@ -76,7 +75,7 @@ export default function SeekerSidebar() {
   const pathname = usePathname()
 
   return (
-    <aside className="w-[240px] bg-sidebar-bg border-r border-border flex flex-col min-h-screen fixed left-0 top-0">
+    <aside className="w-[240px] bg-sidebar-bg border-r border-border flex flex-col h-screen fixed left-0 top-0">
       {/* 로고 */}
       <div className="px-5 py-5">
         <div className="flex items-center gap-2.5">
@@ -114,7 +113,10 @@ export default function SeekerSidebar() {
           <ArrowRight size={16} strokeWidth={1.8} />
           역할 선택으로 돌아가기
         </Link>
-        <button className="flex items-center gap-2 px-3 py-2 text-[13px] text-muted hover:text-foreground transition-colors w-full rounded-lg hover:bg-sidebar-hover">
+        <button
+          onClick={() => { localStorage.removeItem('ats-token'); window.location.href = '/' }}
+          className="flex items-center gap-2 px-3 py-2 text-[13px] text-muted hover:text-foreground transition-colors w-full rounded-lg hover:bg-sidebar-hover"
+        >
           <LogOut size={16} strokeWidth={1.8} />
           로그아웃
         </button>

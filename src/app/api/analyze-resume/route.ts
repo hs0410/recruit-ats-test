@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { checkRateLimit } from '@/lib/rate-limit'
+import { isValidToken } from '@/lib/auth'
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY
 
@@ -87,6 +89,19 @@ const SYSTEM_PROMPT = `당신은 10년 경력의 시니어 채용 컨설턴트�
 }`
 
 export async function POST(request: NextRequest) {
+  // 토큰 검증
+  const token = request.headers.get('Authorization')?.replace('Bearer ', '')
+  if (!token || !isValidToken(token)) {
+    return NextResponse.json({ error: '인증이 필요합니다.' }, { status: 401 })
+  }
+
+  // Rate Limit (IP당 분당 10회)
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || 'unknown'
+  const { allowed, remaining } = checkRateLimit(ip)
+  if (!allowed) {
+    return NextResponse.json({ error: '요청이 너무 많습니다. 1분 후 다시 시도해주세요.' }, { status: 429 })
+  }
+
   if (!GEMINI_API_KEY) {
     return NextResponse.json({ error: 'API key not configured' }, { status: 500 })
   }

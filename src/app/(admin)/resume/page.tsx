@@ -163,9 +163,10 @@ export default function ResumePage() {
     setAnalyzing(true)
     setError('')
     try {
+      const authToken = localStorage.getItem('ats-token') || ''
       const res = await fetch('/api/analyze-resume', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
         body: JSON.stringify({ text }),
       })
       if (!res.ok) {

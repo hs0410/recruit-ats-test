@@ -74,31 +74,46 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* ── 3D 히어로 섹션 ── */}
-      <Card className="w-full h-[600px] bg-black/[0.96] relative overflow-hidden border-0 rounded-none">
-        <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="white" />
+      <Card
+        className="w-full h-[600px] relative overflow-hidden border-0 rounded-none"
+        style={{ backgroundColor: '#0a0a0f', backgroundImage: 'radial-gradient(ellipse at top right, rgba(139,92,246,0.25), transparent 50%), radial-gradient(ellipse at bottom left, rgba(6,182,212,0.15), transparent 50%)' }}
+      >
+        {/* 상단 저작권 바 */}
+        <div className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-6 md:px-12 py-4 border-b border-white/10 backdrop-blur-sm bg-black/20">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+              <Sparkles size={12} className="text-white" />
+            </div>
+            <span className="text-[12px] font-bold text-white tracking-wider">TALENT FLOW</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[11px] text-white/70">
+            <span className="text-white/50">©</span>
+            <span className="font-bold tracking-[0.15em] text-white">HYUNSOO KOH</span>
+            <span className="text-white/50">· 2026</span>
+          </div>
+        </div>
 
-        <div className="flex h-full">
+        <div className="flex h-full pt-12">
           {/* 왼쪽: 브랜딩 + 설명 */}
           <div className="flex-1 p-8 md:p-16 relative z-10 flex flex-col justify-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 backdrop-blur-sm w-fit mb-6">
-              <Sparkles size={14} className="text-indigo-400" />
-              <span className="text-xs text-neutral-300">AI-Powered Recruitment Platform</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 backdrop-blur-sm w-fit mb-6">
+              <Sparkles size={14} className="text-indigo-300" />
+              <span className="text-xs font-semibold text-white">AI-Powered Recruitment Platform</span>
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 tracking-tight leading-[1.1]">
+            <h1 className="text-5xl md:text-7xl font-bold text-white tracking-tight leading-[1.05] drop-shadow-[0_0_30px_rgba(139,92,246,0.3)]">
               Talent Flow
             </h1>
-            <p className="mt-3 text-xl md:text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300">
+            <p className="mt-4 text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-400 to-cyan-400">
               Smart Hiring, Fair Decisions
             </p>
 
-            <p className="mt-6 text-neutral-300 max-w-lg text-[15px] leading-relaxed">
-              구직자와 채용담당자를 잇는 AI 채용 플랫폼.
-              <br />
-              <span className="text-neutral-400">
-                Google Gemini 기반 이력서 분석, 5·3·1 구조화 평가, 통합 평가 뷰로
-                채용의 정확성과 공정성을 높입니다.
-              </span>
+            <p className="mt-6 text-white max-w-lg text-[17px] leading-relaxed font-semibold">
+              구직자와 채용담당자를 잇는 AI 채용 플랫폼
+            </p>
+            <p className="mt-2 text-white/95 max-w-lg text-[15px] leading-relaxed">
+              Google Gemini 기반 이력서 분석, 5·3·1 구조화 평가, 통합 평가 뷰로
+              채용의 정확성과 공정성을 높입니다.
             </p>
 
             {/* 핵심 기능 그리드 */}
@@ -108,12 +123,12 @@ export default function LandingPage() {
                 return (
                   <div
                     key={f.label}
-                    className="flex items-start gap-2.5 p-3 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm"
+                    className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.12] border border-white/30 backdrop-blur-md hover:bg-white/[0.18] hover:border-indigo-300/70 transition-all shadow-lg"
                   >
-                    <Icon size={16} className="text-indigo-400 mt-0.5 flex-shrink-0" />
+                    <Icon size={20} className="text-indigo-300 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-[12px] font-semibold text-white">{f.label}</p>
-                      <p className="text-[10px] text-neutral-400 mt-0.5">{f.desc}</p>
+                      <p className="text-[13px] font-bold text-white">{f.label}</p>
+                      <p className="text-[11px] text-white/80 mt-1 font-medium">{f.desc}</p>
                     </div>
                   </div>
                 )
@@ -121,21 +136,22 @@ export default function LandingPage() {
             </div>
 
             {/* 힌트 + 스크롤 인디케이터 */}
-            <div className="mt-10 flex items-center gap-4">
+            <div className="mt-10 flex items-center gap-4 flex-wrap">
               <a
                 href="#access"
-                className="group inline-flex items-center gap-2 text-[12px] text-neutral-400 hover:text-white transition-colors"
+                className="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 border border-white/30 text-[13px] font-bold text-white hover:bg-white/25 transition-all"
               >
                 <span>아래로 스크롤하여 시작</span>
-                <ChevronDown size={14} className="animate-bounce group-hover:animate-none" />
+                <ChevronDown size={16} className="animate-bounce group-hover:animate-none" />
               </a>
-              <span className="text-neutral-700">·</span>
-              <span className="text-[11px] text-neutral-500">마우스로 3D 모델과 상호작용해보세요 →</span>
+              <span className="text-[12px] text-white/90 font-medium">
+                👉 마우스로 3D 모델과 상호작용해보세요
+              </span>
             </div>
           </div>
 
           {/* 오른쪽: 3D Spline 씬 + 네온 글로우 + 컬러 필터 */}
-          <div className="flex-1 relative hidden md:block">
+          <div className="flex-1 relative min-h-[400px] md:min-h-0">
             {/* 배경 네온 글로우 */}
             <div className="absolute inset-0 pointer-events-none">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-indigo-500/30 via-purple-500/20 to-cyan-500/30 blur-3xl" />

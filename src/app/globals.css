@@ -101,6 +101,25 @@ body {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
+/* Spotlight 애니메이션 (Aceternity) */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
+}
+
+/* shadcn Card 기본 토큰 */
+.bg-card\/\[0\.96\] { background-color: rgb(0 0 0 / 0.96); }
+
 /* 입력 필드 포커스 */
 input:focus, select:focus, textarea:focus {
   outline: none;

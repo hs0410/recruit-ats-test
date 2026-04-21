@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import {
   Sparkles, GraduationCap, Briefcase, CheckCircle2, Shield,
-  Lock, Eye, EyeOff, AlertCircle, Brain, Target, Users, Zap
+  Lock, Eye, EyeOff, AlertCircle, Brain, Target, Users, Zap, ChevronDown
 } from 'lucide-react'
 import { useAuth } from '@/lib/auth-context'
 import { Card } from '@/components/ui/card'
@@ -85,9 +85,12 @@ export default function LandingPage() {
               <span className="text-xs text-neutral-300">AI-Powered Recruitment Platform</span>
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 tracking-tight">
+            <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 tracking-tight leading-[1.1]">
               Talent Flow
             </h1>
+            <p className="mt-3 text-xl md:text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-purple-300 to-cyan-300">
+              Smart Hiring, Fair Decisions
+            </p>
 
             <p className="mt-6 text-neutral-300 max-w-lg text-[15px] leading-relaxed">
               구직자와 채용담당자를 잇는 AI 채용 플랫폼.
@@ -117,25 +120,40 @@ export default function LandingPage() {
               })}
             </div>
 
-            {/* CTA */}
-            <div className="mt-8 flex items-center gap-4">
+            {/* 힌트 + 스크롤 인디케이터 */}
+            <div className="mt-10 flex items-center gap-4">
               <a
                 href="#access"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-[13px] font-semibold shadow-lg shadow-indigo-500/30 hover:opacity-90 transition-opacity"
+                className="group inline-flex items-center gap-2 text-[12px] text-neutral-400 hover:text-white transition-colors"
               >
-                시작하기
-                <Sparkles size={14} />
+                <span>아래로 스크롤하여 시작</span>
+                <ChevronDown size={14} className="animate-bounce group-hover:animate-none" />
               </a>
+              <span className="text-neutral-700">·</span>
               <span className="text-[11px] text-neutral-500">마우스로 3D 모델과 상호작용해보세요 →</span>
             </div>
           </div>
 
-          {/* 오른쪽: 3D Spline 씬 */}
+          {/* 오른쪽: 3D Spline 씬 + 네온 글로우 + 컬러 필터 */}
           <div className="flex-1 relative hidden md:block">
-            <SplineScene
-              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-              className="w-full h-full"
-            />
+            {/* 배경 네온 글로우 */}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-indigo-500/30 via-purple-500/20 to-cyan-500/30 blur-3xl" />
+              <div className="absolute bottom-10 right-10 w-64 h-64 rounded-full bg-cyan-500/20 blur-3xl" />
+              <div className="absolute top-10 left-10 w-48 h-48 rounded-full bg-pink-500/20 blur-3xl" />
+            </div>
+            {/* 로봇 컬러 필터: 퍼플-시안 네온 톤 */}
+            <div
+              className="relative w-full h-full"
+              style={{
+                filter: 'hue-rotate(235deg) saturate(1.6) contrast(1.15) brightness(1.1) drop-shadow(0 0 30px rgba(139, 92, 246, 0.4))',
+              }}
+            >
+              <SplineScene
+                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                className="w-full h-full"
+              />
+            </div>
           </div>
         </div>
       </Card>

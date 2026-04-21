@@ -75,7 +75,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-black text-white">
       {/* ── 3D 히어로 섹션 ── */}
       <Card
-        className="w-full h-[600px] relative overflow-hidden border-0 rounded-none"
+        className="w-full min-h-[700px] relative overflow-hidden border-0 rounded-none"
         style={{ backgroundColor: '#0a0a0f', backgroundImage: 'radial-gradient(ellipse at top right, rgba(139,92,246,0.25), transparent 50%), radial-gradient(ellipse at bottom left, rgba(6,182,212,0.15), transparent 50%)' }}
       >
         {/* 상단 저작권 바 */}
@@ -93,7 +93,7 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div className="flex h-full pt-12">
+        <div className="flex h-full pt-20 md:pt-24">
           {/* 왼쪽: 브랜딩 + 설명 */}
           <div className="flex-1 p-8 md:p-16 relative z-10 flex flex-col justify-center">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/20 border border-indigo-400/40 backdrop-blur-sm w-fit mb-6">
